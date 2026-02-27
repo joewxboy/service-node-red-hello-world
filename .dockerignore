@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+CLAUDE.md
+README.md
+LICENSE.txt
+Makefile
+Screenshots
+horizon
+node_modules

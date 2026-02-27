@@ -1,7 +1,7 @@
-FROM registry.access.redhat.com/ubi9:9.1.0-1646 as build
+FROM registry.access.redhat.com/ubi9:9.1.0-1646 AS build
 LABEL stage=builder
 
-RUN dnf install --nodocs -y nodejs nodejs-nodemon npm --setopt=install_weak_deps=0 --disableplugin=subscription-manager \
+RUN dnf install --nodocs -y nodejs npm --setopt=install_weak_deps=0 --disableplugin=subscription-manager \
     && dnf install --nodocs -y make gcc gcc-c++  --setopt=install_weak_deps=0 --disableplugin=subscription-manager \
     && dnf clean all --disableplugin=subscription-manager
 
@@ -29,7 +29,7 @@ USER 0
 #    rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
 RUN microdnf update -y --nodocs --disableplugin=subscription-manager --setopt=install_weak_deps=0 && \
-    microdnf install --nodocs -y nodejs nodejs-nodemon npm --setopt=install_weak_deps=0 && \
+    microdnf install --nodocs -y nodejs npm --setopt=install_weak_deps=0 && \
     microdnf clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
@@ -38,7 +38,7 @@ USER 1000
 COPY --from=build /opt/app-root/data /opt/app-root/data/
 WORKDIR /opt/app-root/data
 
-ENV PORT 1880
+ENV PORT=1880
 ENV NODE_ENV=production
 ENV NODE_PATH=/opt/app-root/data/node_modules
 EXPOSE 1880
